@@ -1,0 +1,31 @@
+name: deploy-container
+
+# if someone pushes the code in the master branch and specifically in the containers package
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/container/**'
+
+defaults:
+  run:
+    # setting working directory so that npm install and other commands can work
+    working-directory: packages/container
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # pull the latest code from the repo and run following commands
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+
+      # will use aws cli to push the build to S3
+      - uses: chrislennon/action-aws-cli@v1.1
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
