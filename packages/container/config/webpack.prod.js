@@ -10,6 +10,8 @@ const prodConfig = {
 	mode: "production",
 	output: {
 		filename: "[name].[contenthash].js",
+		/* Used by HtmlWebpackPlugin to prepend it in the script name before injecting it into the html document */
+		publicPath: "/container/latest/",
 	},
 	plugins: [
 		new ModuleFederationPlugin({
