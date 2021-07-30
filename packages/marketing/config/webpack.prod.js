@@ -9,6 +9,8 @@ const prodConfig = {
 	output: {
 		filename: "[name].[contenthash].js",
 		/* Defining public path so that url's defined inside the remoteEntry.js to load other dependencies should get update correctly */
+		/* path should be same where we are placing our marketing files in the S3 bucket */
+		/* please refer marekting.yml file. aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/marketing/latest/remoteEntry.js" */
 		publicPath: "/marketing/latest/",
 	},
 	plugins: [
