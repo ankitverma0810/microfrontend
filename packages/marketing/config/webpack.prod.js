@@ -8,6 +8,8 @@ const prodConfig = {
 	mode: "production",
 	output: {
 		filename: "[name].[contenthash].js",
+		/* Defining public path so that url's defined inside the remoteEntry.js to load other dependencies should get update correctly */
+		publicPath: "/marketing/latest/",
 	},
 	plugins: [
 		new ModuleFederationPlugin({
