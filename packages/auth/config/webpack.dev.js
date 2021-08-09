@@ -9,19 +9,19 @@ const devConfig = {
 	mode: "development",
 	output: {
 		// setting public path so that resources should get downloaded properly when we are on nested routes
-		// will prepend 'http://localhost:8081/' in index.html to load JS files if we are on nested route.
-		publicPath: "http://localhost:8081/",
+		// will prepend 'http://localhost:8082/' in index.html to load JS files if we are on nested route eg auth/signin.
+		publicPath: "http://localhost:8082/",
 	},
 	devServer: {
-		port: 8081,
+		port: 8082,
 		historyApiFallback: true,
 	},
 	plugins: [
 		new ModuleFederationPlugin({
-			name: "marketing",
+			name: "auth",
 			filename: "remoteEntry.js",
 			exposes: {
-				"./MarketingApp": "./src/bootstrap",
+				"./AuthApp": "./src/bootstrap",
 			},
 			shared: packageJson.dependencies,
 		}),
