@@ -1,4 +1,5 @@
 const { merge } = require("webpack-merge");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const packageJson = require("../package.json");
@@ -8,21 +9,29 @@ const devConfig = {
 	mode: "development",
 	output: {
 		// setting public path so that resources should get downloaded properly when we are on nested routes
-		publicPath: "http://localhost:8080/",
+		// will prepend 'http://localhost:8083/' in index.html to load JS files if we are on nested route eg auth/signin.
+		publicPath: "http://localhost:8083/",
 	},
 	devServer: {
-		port: 8080,
+		port: 8083,
 		historyApiFallback: true,
+		// enabling CORS
+		// for loading fonts when running the application inside the container/host
+		headers: {
+			"Access-Control-Allow-Origin": "*",
+		},
 	},
 	plugins: [
 		new ModuleFederationPlugin({
-			name: "container",
-			remotes: {
-				marketing: "marketing@http://localhost:8081/remoteEntry.js",
-				auth: "auth@http://localhost:8082/remoteEntry.js",
-				dashboard: "dashboard@http://localhost:8083/remoteEntry.js",
+			name: "dashboard",
+			filename: "remoteEntry.js",
+			exposes: {
+				"./DashboardApp": "./src/bootstrap",
 			},
 			shared: packageJson.dependencies,
+		}),
+		new HtmlWebpackPlugin({
+			template: "./public/index.html",
 		}),
 	],
 };
